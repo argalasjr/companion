@@ -1,0 +1,11 @@
+{
+  "name": "Companion",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "proxies": [{
+    "path": "/*",
+    "proxyUrl": "https://dev-ids.tbs-biometrics.com"
+}]
+}

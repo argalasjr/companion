@@ -1,0 +1,182 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+:root {
+  --ion-color-gold: #ffd700;
+  --ion-color-gold-rgb: 255, 215, 0;
+  --ion-color-gold-contrast: #000000;
+  --ion-color-gold-contrast-rgb: 0, 0, 0;
+  --ion-color-gold-shade: #e0bd00;
+  --ion-color-gold-tint: #ffdb1a;
+}
+.ion-color-gold {
+  --ion-color-base: var(--ion-color-gold) !important;
+  --ion-color-base-rgb: var(--ion-color-gold-rgb) !important;
+  --ion-color-contrast: var(--ion-color-gold-contrast) !important;
+  --ion-color-contrast-rgb: var(--ion-color-gold-contrast-rgb) !important;
+  --ion-color-shade: var(--ion-color-gold-shade) !important;
+  --ion-color-tint: var(--ion-color-gold-tint) !important;
+}
+
+.action-sheet{
+  --button-color-selected:gold;
+}
+
+.action-sheet-button-success{
+  --color: #2dd36f;
+  --button-color:#2dd36f;
+
+  --button-color-activated:#2dd36f;
+}
+
+.action-sheet-button-danger{
+  --color: #eb445a;
+  --button-color:#eb445a;
+  --button-color-activated::#eb445a;
+}
+
+.progress-wrapper {
+  position: relative;
+  margin: 0px;
+  padding-left: 5px;
+  padding-right: 5px;
+  }
+
+  .current {
+    position: absolute;
+    padding-left: 30%;
+    padding-top: 35%;
+    color: #bbb;
+    font-weight: 100;
+    line-height: 1;
+
+    width: auto;
+    height: auto;
+  }
+
+  .currentText {
+    color: #3880ff;
+    font-weight: bold;
+    width: auto;
+    height: auto;
+  }
+
+  .toolbar-background-md {
+    border-color: #b2b2b2;
+    background: #2399ff;
+    width: auto;
+    height: auto;
+  }
+  .toolbar-title-md {
+    padding: 0 12px;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #fff;
+    width: auto;
+    height: auto;
+  }
+  .numbers{
+    padding-top: 20%;
+    padding-left: 10%;
+  }
+
+  .center-vertical > * {
+      -webkit-box-ordinal-group: 1;
+      -moz-box-ordinal-group: 1;
+      -webkit-order: 0;
+      -ms-flex-order: 0;
+      order: 0;
+      -webkit-box-flex: 1;
+      -moz-box-flex: 1;
+      -webkit-flex: 1 1 auto;
+      -ms-flex: 1 1 auto;
+      flex: 1 1 auto;
+      -webkit-align-self: auto;
+      -ms-flex-item-align: auto;
+      align-self: auto;
+  }
+  .pincode-input{
+    margin-right: 5px;
+    height: 30px;
+    padding-top: 12%;
+  }
+  .col-10{
+    border-bottom: 1px solid black;
+    padding-bottom: 7%;
+    padding-left: 9%;
+  }
+  .number{
+
+    border: 1px solid #2399ff;
+    border: 50%;
+    width: 70px;
+    border-radius: 50%;
+    height: 70px;
+    overflow:hidden;
+    background:white; 
+  }
+  .button-stretch {
+      width: 100%;
+       color: #2399ff;
+       margin-top: 32%;
+      margin-left: -3%;
+  }
+  .errorMessage {
+      border: 1px solid red;
+      background: red;
+      color: white;
+      margin-top: 15%;
+      text-align: center;
+  }
+  .fingerButton{
+      border: 50%;
+      width: 70px;
+      border-radius: 50%;
+      background:white; 
+      height: 70px;
+      overflow: hidden;
+  }
+  .grid {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-orient: vertical;
+    -webkit-box-direction: normal;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+  }
+
+  .timerString{
+    font-size: x-large;
+    font-family: sans-serif;
+
+  }

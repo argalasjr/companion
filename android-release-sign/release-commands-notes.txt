@@ -1,0 +1,3 @@
+jarsigner -keystore release-key.keystore ../platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk TBS
+
+zipalign -v 4 ../platforms/android/app/build/outputs/apk/release/app-release-unsigned.apk app-release.apk

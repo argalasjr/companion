@@ -1,0 +1,39 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>
+      Settings
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button [disabled]="!session.isValidSession()" type="submit" (click)="signOut()" expand="block">Logout</ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-card  class="ion-padding">
+    <ion-avatar  class="center-img" >
+      <img [src]="avatarSrc"/>
+    </ion-avatar>
+    <br>
+    <div class="ion-text-center" >{{ profile.acntName}} </div> <br>
+    <div class="ion-text-center" >{{ basUser.bas_FirstName}} {{ basUser.bas_LastName}}</div>
+  </ion-card>
+
+
+ <!-- <ion-list>
+
+  <ion-item>
+    <ion-label (click)="clearCache()" > Clear storage cache</ion-label>
+  </ion-item>
+ </ion-list> -->
+ <ion-card  class="ion-padding">
+   <ion-item lines="none" >Use PIN <ion-toggle slot="end"  [checked]="usePin" (ionChange)="handlePin($event)"></ion-toggle></ion-item>
+ 
+</ion-card>
+</ion-content>
+<ion-footer  class="ion-no-border" >
+  <ion-toolbar align="center">
+    <ion-label class="ion-text-wrap">Copyright © <br> Touchless Biometric Systems AG <br> {{version}}</ion-label>
+  </ion-toolbar>
+</ion-footer>
