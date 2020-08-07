@@ -1,42 +1,80 @@
-<ion-header [translucent]="true" >
+<ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title >
-    Dashboard {{ networkStatus }}
-  </ion-title>
-      
+    <ion-title>
+      {{'dashboard.title' | translate}} 
+      <ion-label *ngIf="networkStatus === 'Online'">  {{'dashboard.network-status-online'| translate }} </ion-label> 
+      <ion-label *ngIf="networkStatus === 'Offline'">  {{'dashboard.network-status-offline'| translate }} </ion-label> 
+      <ion-icon *ngIf="networkStatus === 'Online'"  color ="success" src='../assets/icon/wifi-24px.svg' ></ion-icon> 
+      <ion-icon *ngIf="networkStatus === 'Offline'"color ="danger" src='../assets/icon/wifi_off-24px.svg' ></ion-icon>
+    </ion-title>
+
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true" >
-  <ion-grid> 
+<ion-content [fullscreen]="true">
+  <ion-grid>
     <ion-row>
-      <ion-col >    
-        <ion-card-header style="padding-top: 0px;" >TODAYS'S STATUS</ion-card-header>       
-          <ion-card style="margin: 0px;">                                       
-              <ion-card-content > 
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 100"><ion-label color="success"><ion-icon name="business"  color="success" ></ion-icon> Work</ion-label></ion-item>
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 150"><ion-label color="success"><ion-icon name="cafe" color="success"></ion-icon> Break</ion-label></ion-item>
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 151"><ion-label color="success"><ion-icon name="briefcase" color="success"></ion-icon> Trip</ion-label></ion-item>
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 152"><ion-label color="success"><ion-icon name="people" color="success"></ion-icon> Meeting</ion-label></ion-item>
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 153"><ion-label color="success"><ion-icon src='../assets/icon/school.svg' color="success"></ion-icon> Education</ion-label></ion-item>                                
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 158"><ion-label color="success"><ion-icon src='../assets/icon/stethoscope.svg' color="success"></ion-icon> Doctor</ion-label></ion-item>
-                <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 200"><ion-label color="danger" ><ion-icon src='../assets/icon/alarm-off.svg' color="danger"></ion-icon> Off Duty</ion-label></ion-item>
-                
-                
-                <ion-item  class="timerString ion-text-center" lines="none" ><ion-label class="timerString" >{{ displayTime | hoursMinutesSeconds }}</ion-label></ion-item>                 
-                <ion-button [disabled]="!isEnabled" expand="block" fill="solid" (click)="showActionSheet()">CHANGE STATUS</ion-button>
-              </ion-card-content>
-          </ion-card>         
-          <ion-card-header >WORK STATUS</ion-card-header>
-            <ion-card style="margin: 0px;">                                       
-              <ion-card-content>                   
-                <app-work-status></app-work-status>
-              </ion-card-content>
-            </ion-card>
+      <ion-col>
+        <ion-card-header style="padding-top: 0px;">{{'dashboard.today-status' | translate}}</ion-card-header>
+        <ion-card style="margin: 0px;">
+          <ion-card-content>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 100">
+              <ion-label color="success">
+                <ion-icon name="business" color="success"></ion-icon>{{'dashboard.work' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 150">
+              <ion-label color="success">
+                <ion-icon name="cafe" color="success"></ion-icon> {{'dashboard.break' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 151">
+              <ion-label color="success">
+                <ion-icon name="briefcase" color="success"></ion-icon> {{'dashboard.trip' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 152">
+              <ion-label color="success">
+                <ion-icon name="people" color="success"></ion-icon>{{'dashboard.meeting' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 153">
+              <ion-label color="success">
+                <ion-icon src='../assets/icon/school.svg' color="success"></ion-icon>
+                {{'dashboard.education' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 158">
+              <ion-label color="success">
+                <ion-icon src='../assets/icon/stethoscope.svg' color="success"></ion-icon>
+                {{'dashboard.doctor' | translate}}
+              </ion-label>
+            </ion-item>
+            <ion-item class="ion-text-center" lines="none" *ngIf="currentStatus === 200">
+              <ion-label color="danger">
+                <ion-icon src='../assets/icon/alarm-off.svg' color="danger"></ion-icon>
+                {{'dashboard.off-duty' | translate}}
+              </ion-label>
+            </ion-item>
+
+
+            <ion-item class="timerString ion-text-center" lines="none">
+              <ion-label class="timerString">{{ displayTime | hoursMinutesSeconds }}</ion-label>
+            </ion-item>
+            <ion-button [disabled]="!isEnabled" expand="block" fill="solid" (click)="showActionSheet()">
+              {{'dashboard.change-status' | translate}}</ion-button>
+          </ion-card-content>
+        </ion-card>
+        <ion-card-header>{{'dashboard.work-status' | translate}}</ion-card-header>
+        <ion-card style="margin: 0px;">
+          <ion-card-content>
+            <app-work-status></app-work-status>
+          </ion-card-content>
+        </ion-card>
 
 
 
-            <!-- <ion-card-header>Debug</ion-card-header>
+        <!-- <ion-card-header>Debug</ion-card-header>
             <ion-card>                                       
               <ion-card-content>                   
                 <ion-list class="small-list" lines="none" *ngFor="let msg of loggerList" >  
@@ -46,28 +84,7 @@
             </ion-card> -->
 
 
-          
-            <ion-grid *ngIf="actionSheetVisible" backdrop-dismiss = true>
-              <ion-row>
-                <ion-item>Work</ion-item>
-                <ion-item>Item2</ion-item>
-              </ion-row>
-              
-              <ion-row>
-                <ion-item>Item1</ion-item>
-                <ion-item>Item2</ion-item>
-              </ion-row>
-              
-              <ion-row>
-                <ion-item>Item1</ion-item>
-                <ion-item>Item2</ion-item>
-              </ion-row>
-              <ion-row>
-                <ion-item>Item1</ion-item>
-              </ion-row>
-            </ion-grid>
-            
-        </ion-col>
+      </ion-col>
     </ion-row>
   </ion-grid>
 </ion-content>

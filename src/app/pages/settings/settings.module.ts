@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { TranslateModule } from '@ngx-translate/core';
 import { SettingsPage } from './settings.page';
 
 @NgModule({
@@ -11,7 +11,8 @@ import { SettingsPage } from './settings.page';
     IonicModule,
     CommonModule,
     FormsModule,
-    RouterModule.forChild([{ path: '', component: SettingsPage }])
+    RouterModule.forChild([{ path: '', component: SettingsPage }]),
+    TranslateModule.forChild()
   ],
   declarations: [SettingsPage]
 })

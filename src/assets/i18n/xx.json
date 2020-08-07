@@ -1,0 +1,44 @@
+{
+  "common" : {
+    "add" : "common.add",
+    "cancel" : "common.cancel",
+    "error" : "common.error",
+    "no" : "common.no",
+    "ok" : "common.ok",
+    "proceed" : "common.proceed",
+    "success" : "common.success",
+    "yes" : "common.yes"
+  },
+  "dashboard" : {
+    "title" : "dashboard.title",
+    "select-status" : "dashboard.select-status",
+    "work": "dashboard.work",
+    "break": "dashboard.break",
+    "trip": "dashboard.trip",
+    "doctor": "dasboard.doctor",
+    "education": "dashboard.education",
+    "meeting": "dashboard.meeting",
+    "off-duty": "dashboard.off-duty",
+    "today-status": "dashboard.today-status",
+    "work-status": "dashboard.work-status",
+    "change-status": "dashboard.change-status",
+    "network-status-online": "dashboard.network-status-online",
+    "network-status-offline": "dashboard.network-status-online"
+
+  },
+  "settings" : {
+    "language" : "settings.language",
+    "system-default" : "settings.system-default",
+    "title" : "settings.title",
+    "use-pin": "settings.use-PIN",
+    "logout": "settings.logout"
+  },
+  "pin-modal":{
+    "title":"pin-modal.title",
+    "message":"pin-modal.message",
+    "bio-title":"pin-modal.bio-title",
+    "bio-message":"pin-modal.bio-message",
+    "use-bio":"pin-modal.use-bio",
+    "wrong-pin": "pin-modal.wrong-pin"
+  }
+}

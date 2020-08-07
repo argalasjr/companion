@@ -1,5 +1,5 @@
 import { Injectable, NgZone, OnInit, EventEmitter, Output} from '@angular/core';
-import { ModalController, Platform } from '@ionic/angular';
+import { AlertController,ModalController, Platform } from '@ionic/angular';
 import { ErrorDialogService } from '../../services/error-dialog/error-dialog.service';
 import { RestApiService } from '../../services/rest-api/rest-api.service';
 import { AuthProvider } from '../../providers/auth/auth.provider';
@@ -12,7 +12,7 @@ import { BasUser} from '../../interfaces/bas-user';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { AuthModalComponent } from './auth-modal/auth-modal.component';
 import { SecureStorage, SecureStorageObject } from '@ionic-native/secure-storage/ngx';
-
+import { TranslateService } from '@ngx-translate/core';
 @Injectable({
     providedIn: 'root'
   })
@@ -28,7 +28,9 @@ export class SessionProvider implements OnInit {
   public readonly PROFILE_UID_KEY = 'profile_uid';
   public readonly TA_CONFIG = 'ta_config';
   private readonly USER_WORK_SESSION_KEY = 'user_work_session_key';
-
+  //FOR DEBUGGING ENABLE THIS
+  //private readonly PRODUCTION = false;
+  private readonly PRODUCTION = true;
   taConfig = null;
   touchAvailable = false;
   userWorkSession = null;
@@ -55,7 +57,9 @@ export class SessionProvider implements OnInit {
     private storage: Storage,
     private splashScreen: SplashScreen,
     private modalCtrl: ModalController,
-    private secureStorage: SecureStorage
+    private secureStorage: SecureStorage,
+    private alertCtrl: AlertController,
+    private tr: TranslateService,
     ) {
       this.platform.ready()
       .then(() => {
@@ -70,7 +74,7 @@ export class SessionProvider implements OnInit {
           this.synchronizationEvent.subscribe((isSincing) => {
               if (isSincing) {
                   this.isSyncing = true;
-                  this.loadingService.show({ message: 'Synchronization of offline records in progress... Please wait' });
+                  this.loadingService.show({ message: this.tr.instant('session.synchro') });
                   // setTimeout(() => { this.loadingService.hide(); console.log('timer off'); }, 3000);
               }
 
@@ -104,7 +108,7 @@ export class SessionProvider implements OnInit {
             }
           });
           this.auth.authCompletedEvent.subscribe(
-            (AuthProfile) => {
+            (AuthProfile) => {              
               this.setProfile(AuthProfile).then( () => {
               if ( this.localSessionExists &&
                    this.basUser &&
@@ -128,6 +132,7 @@ export class SessionProvider implements OnInit {
                   }
 
                 } else {
+                  this.loadingService.hide();
                   console.log('no config');
                 }
 
@@ -166,6 +171,14 @@ export class SessionProvider implements OnInit {
                   }
                 }
               });
+              }, ()=>{
+                console.log('no profile');
+                this.loadingService.hide();
+                this.sessionValid = false;
+                this.endSessionEvent.emit();
+                this.auth.resetToken();
+                this.storage.clear();
+                this.alertSessionFailed();
               });
             });
             this.pinBioAuthEvent.subscribe((value)=>{
@@ -198,12 +211,12 @@ export class SessionProvider implements OnInit {
                    }
                  
                 },
-                error => this.profile.hasPin = false,
+                error => this.userHasPin = false,
               );
               });
             }
             });
-          this.endSessionEvent.subscribe( () => {
+          this.endSessionEvent.subscribe( async () => {
             console.log('invalidating session');
             this.secureStorage.create('pincode')
             .then((sstorage: SecureStorageObject) => {
@@ -232,6 +245,22 @@ export class SessionProvider implements OnInit {
   async sessionCreate() {
     console.log('ionViewWillEnter Session');
     this.startSession(this.network.getCurrentNetworkStatus());
+  }
+
+  async alertSessionFailed() {
+    await this.alertCtrl.create({
+      message: this.tr.instant('session.fail'),
+
+      buttons: [
+        {
+          text: this.tr.instant('common.ok'),
+          handler: () => {
+            this.sessionCreate()
+          }
+        }
+      ],
+      
+    }).then(alert => alert.present())
   }
 
 
@@ -265,6 +294,10 @@ export class SessionProvider implements OnInit {
     this.basUser = await this.storage.get(await this.storage.get(this.BAS_USER_UID_KEY));
     this.profile =  await this.storage.get(await this.storage.get(this.PROFILE_UID_KEY));
     this.userWorkSession =  await this.storage.get(await this.storage.get(this.USER_WORK_SESSION_KEY));
+    if(!this.basUser || !this.profile ){
+        this.storage.clear();
+      }
+    
     this.storage.get(this.TA_CONFIG).then((taConfig) => {
       if (taConfig) {
         this.taConfig = taConfig;
@@ -286,7 +319,7 @@ export class SessionProvider implements OnInit {
           await this.openModal();
          }
         },
-        error => this.profile.hasPin = false,
+        error => this.userHasPin = false,
       );
       });
 
@@ -313,11 +346,7 @@ export class SessionProvider implements OnInit {
               console.log('no bas user - landing page');
               this.loadingService.show({message: 'No account authorized. Please connect and authorize yourself.'});
             }
-          } else {
-            console.log('no auth - landing page');
-            this.loadingService.show({message: 'No account authorized. Please connect and authorize yourself.'});
-          }
-
+          } 
         });
 
       }
@@ -348,13 +377,41 @@ export class SessionProvider implements OnInit {
 
   async setProfile(AuthProfile) {
     this.profile = {} as Profile;
-    const acnt =  AuthProfile['tbs-acnt-st'][0] ? AuthProfile['tbs-acnt-st'][0] :  AuthProfile['tbs-acnt-st'];
+    if ( AuthProfile === null){
+      throw new Error('no profile');
+    }
+    if (AuthProfile['tbs-acnt-st'] === null)
+    {
+      throw new Error('no profile');
+    }
+
+    let acnt = null
+
+    if ( AuthProfile['tbs-acnt-st'].length > 1 && this.PRODUCTION)
+    {
+      const profilesArr = AuthProfile['tbs-acnt-st'];
+      for(let i = 0; i < profilesArr.length;i++ ){
+        if(profilesArr[i].Name === 'TBS Official'){
+          acnt = profilesArr[i];
+          console.log('nasiel som official site ',acnt)
+          break;
+        }
+      }
+    } else {
+      acnt =  AuthProfile['tbs-acnt-st'][0] ? AuthProfile['tbs-acnt-st'][0] :  AuthProfile['tbs-acnt-st'];
+    }
+  
+
+    console.log(acnt)
+   
+   
     this.profile.linkUserId = acnt.LinkUserUID;
     this.profile.acntName = acnt.Name;
     this.profile.email = AuthProfile.email;
     this.profile.displayName = AuthProfile.name;
     this.profile.zone = AuthProfile.zoneinfo;
     this.profile.updatedAt = new Date(AuthProfile.updated_at);
+    this.profile.hasPin = false;
     this.updateProfile(this.profile);
   }
 

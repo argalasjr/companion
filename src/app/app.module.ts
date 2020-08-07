@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { HoursMinutesSecondsPipeModule } from './services/pipes/time/hours-minutes-seconds.module';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { IonicStorageModule } from '@ionic/storage';
@@ -27,12 +27,28 @@ import { AuthProvider } from './providers/auth/auth.provider';
 import { SessionProvider } from './providers/session/session.provider';
 import { AuthModalComponent } from './providers/session/auth-modal/auth-modal.component';
 
+
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+}
+
 @NgModule({
   declarations: [AppComponent, AuthModalComponent],
   entryComponents: [ AuthModalComponent],
   imports: [BrowserModule,
     HttpClientModule,
     RoundProgressModule,
+    TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     IonicModule.forRoot(),
     IonicStorageModule.forRoot(),
     AppRoutingModule,

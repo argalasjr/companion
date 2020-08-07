@@ -23,8 +23,17 @@ import { BrowserProvider } from '../../providers/browser/browser.provider';
 import { LoadingService } from 'src/app/services/loading/loading.service';
 
 
-const IDENTITY_SERVER_URL = 'https://dev-ids.tbs-biometrics.com';
-const CLIENT_ID = 'TBS-CE-TC2020demo';
+//PRODUCTION
+const IDENTITY_SERVER_URL = 'https://ids.tbs-biometrics.com';
+const CLIENT_ID = 'TBS-CE-TC2020';
+const CLIENT_SECRET = 'TBS-CE-TC2020--mvKWe8XqQ0pRHhQA0k6wtXn56Ub1TZDVkCeWNPcsFQbdbrWIq';
+
+//DEVELOPMENT
+// const IDENTITY_SERVER_URL = 'https://dev-ids.tbs-biometrics.com';
+// const CLIENT_ID = 'TBS-CE-TC2020demo';
+// const CLIENT_SECRET = '12345678';
+
+
 const REDIRECT_URI = 'com.tbs-biometrics.tc2020://cb';
 const SCOPE = 'openid profile offline_access email tbs-acnt TBS-Core-RA-WebAPI-2017 TBS-Device-WSAPI-2018 TBS-NC-WSAPI-2018';
 const END_SESSION_REDIRECT_URI =  'com.tbs-biometrics.tc2020://cb';
@@ -97,6 +106,12 @@ export class AuthProvider {
             this.authCompletedResolve = resolve;
             this.authCompletedReject = reject;
         });
+    }
+
+    public resetToken(){
+        this.resetAuthCompletedPromise();
+        this.storageBackend.clear();
+        delete this.tokenResponse;
     }
 
     private async getTokensFlow() {
@@ -248,7 +263,7 @@ export class AuthProvider {
                 code: this.code,
                 extras: {
                     code_verifier: codeVerifier,
-                    client_secret: '12345678'
+                    client_secret: CLIENT_SECRET
                 }
             });
              this.helpers.appendLog('Peform token request ' + JSON.stringify(this.configuration));
@@ -258,15 +273,17 @@ export class AuthProvider {
                 await this.saveTokenResponse(response);
                 this.authCompletedResolve();
                 const UserInfo = await this.getUserInfo(this.tokenResponse.accessToken);
+                console.log('user ', UserInfo)
                 this.helpers.appendLog('User Info request complete ');
                 this.authCompletedEvent.emit(UserInfo);
              },
              err => {
                  console.log('rejceted token response');
                  this.loadingService.hide();
+                 delete this.tokenResponse;
                  this.storageBackend.clear();
                  this.resetAuthCompletedPromise();
-                 this.signin();
+                 //this.signin();
              });
 
 
@@ -319,16 +336,16 @@ export class AuthProvider {
                 refresh_token: this.tokenResponse.refreshToken,
                 extras: {
                     code_verifier: codeVerifier,
-                    client_secret: '12345678'
+                    client_secret: CLIENT_SECRET
                 }
             });
 
             await this.tokenHandler.performTokenRequest(this.configuration, request).then(async (response) => {
-                this.helpers.appendLog('Token request complete ');
-                console.log(response);
+                console.log('refresh token response ',response);
                 await this.saveTokenResponse(response);
                 this.authCompletedResolve();
                 const UserInfo = await this.getUserInfo(this.tokenResponse.accessToken);
+                console.log('user ', UserInfo)
                 this.helpers.appendLog('User Info request complete ');
                 this.authCompletedEvent.emit(UserInfo);
              },

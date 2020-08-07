@@ -2,7 +2,12 @@
 <ion-row>
   <ion-col>
   <div class="progress-wrapper">
-    <div class="current" > <ion-row style="font-size: medium;"><div class="currentText">{{ currentWeekHours }} /</div>{{ maxWeekHours }}</ion-row><div class="currentText">Week</div></div>
+    <div class="current">
+      <ion-row style="font-size: medium;">
+        <div class="currentText">{{ currentWeekHours }} /</div>{{ maxWeekHours }}
+      </ion-row>
+      <div class="currentText">{{'dashboard.week' | translate}}</div>
+    </div>
 <round-progress 
     [current]="currentWeekHours"
     [max]="maxWeekHours"
@@ -22,7 +27,12 @@
 </ion-col>
 <ion-col>
   <div class="progress-wrapper"  >
-    <div class="current" > <ion-row sstyle="font-size: medium;"><div class="currentText">{{ currentMonthHours }} /</div>{{ maxMonthHours }}</ion-row><div class="currentText">Month</div></div>
+    <div class="current">
+      <ion-row sstyle="font-size: medium;">
+        <div class="currentText">{{ currentMonthHours }} /</div>{{ maxMonthHours }}
+      </ion-row>
+      <div class="currentText">{{'dashboard.month' | translate}}</div>
+    </div>
 <round-progress
     [current]="currentMonthHours"
     [max]="maxMonthHours"

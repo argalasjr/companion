@@ -1,0 +1,53 @@
+{
+  "common" : {
+    "add" : "Add",
+    "cancel" : "Cancel",
+    "error" : "Error",
+    "no" : "No",
+    "ok" : "OK",
+    "proceed" : "Proceed",
+    "success" : "Success",
+    "yes" : "Yes"
+  },
+  "dashboard" : {
+    "title" : "Dashboard",
+    "select-status": "PLEASE SELECT NEW STATUS",
+    "work": "Work",
+    "break": "Break",
+    "trip": "Trip",
+    "doctor":"Doctor",
+    "education": "Education",
+    "meeting": "Meeting",
+    "off-duty": "Off Duty",
+    "today-status": "TODAY'S STATUS",
+    "work-status": "WORK STATUS",
+    "change-status": "CHANGE STATUS",
+    "network-status-online": "Online",
+    "network-status-offline": "Offline",
+    "week":"Week",
+    "month":"Month"
+
+
+
+  },
+  "settings" : {
+    "system-default" : "System",
+    "title" : "Settings",
+    "language": "Language",
+    "use-pin": "Use PIN",
+    "logout": "Logout"
+  },
+  "pin-modal":{
+    "status-login":"Login",
+    "status-create":"Create PIN",
+    "message":"Enter your 4 digit PIN code",
+    "bio-title":"Biometric Authentication",
+    "bio-message":"Use your your fingerprint or faceId to login",
+    "use-bio":"Use biometric authorization",
+    "wrong-pin": "Enter correct PIN!"
+  },
+  "session":{
+    "synchro":"Synchronization of offline records in progress... Please wait",
+    "fail": "Profile with this site does not exist!"
+  }
+}

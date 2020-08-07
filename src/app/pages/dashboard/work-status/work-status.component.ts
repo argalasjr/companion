@@ -36,7 +36,9 @@ export class WorkStatusComponent implements OnInit {
     ) {
     this.session.taConfigEvent.subscribe((taConfig) => {
       this.maxWeekHours = taConfig.allocHoursPerWeek;
-      this.maxDayHours = taConfig.maxAllowedWorkHoursPerDay;
+      if (this.maxWeekHours <= 20 ){
+        this.maxDayHours = 4
+      }
       this.maxMonthHours = this.computeMonthHours();
       this.cd.detectChanges();
       console.log(taConfig);

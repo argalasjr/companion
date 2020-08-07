@@ -3,83 +3,85 @@
 		<ion-title>
 			{{ pageStatus }}
 		</ion-title>
-    </ion-toolbar>
+	</ion-toolbar>
 </ion-header>
-<!-- <ion-label>  Enter your 4 digit PIN code </ion-label> -->
-<ion-content padding class="center-vertical">
-	<ion-grid style="padding-bottom: 10%;">
-		<ion-row class="row pincode-input">
-			<ion-col class="col col-10 col-offset-10">
-				<span *ngIf="codeone || codeone == 0">*</span>
-			</ion-col>&nbsp;&nbsp;
-			<ion-col class="col col-10 col-offset-10">
-				<span *ngIf="codetwo || codetwo == 0">*</span>
-			</ion-col>&nbsp;&nbsp;
-			<ion-col class="col col-10 col-offset-10">
-				<span *ngIf="codethree || codethree == 0">*</span>
-			</ion-col>&nbsp;&nbsp;
-			<ion-col class="col-10 col-offset-10">
-				<span *ngIf="codefour || codefour == 0">*</span>
-			</ion-col>
-		</ion-row>
-		
-		</ion-grid>
-			<ion-grid style="padding-left: 10%; padding-top: 5%;"  class="numbers" >
-		<ion-row  >
-			<ion-col >
-				<ion-button class="number"(click)="add('1')">1</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button class="number" (click)="add('2')">2</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button class="number" (click)="add('3')">3</ion-button>
-			</ion-col>
-		</ion-row>
-		<ion-row>
-			<ion-col >
-				<ion-button  class="number" (click)="add('4')">4</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button  class="number" (click)="add('5')">5</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button  class="number" (click)="add('6')">6</ion-button>
-			</ion-col>
-		</ion-row>
-		<ion-row>
-			<ion-col >
-				<ion-button  class="number" (click)="add('7')">7</ion-button>
-			</ion-col>
-			<ion-col>
-				<ion-button  class="number" (click)="add('8')">8</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button  class="number" (click)="add('9')">9</ion-button>
-			</ion-col>
-		</ion-row>
-		<ion-row>
-            <ion-col >
-				<ion-button  fill="outline" class="fingerButton"  (click)="reset()"><ion-icon style="zoom: 1.25;"  name="reload-outline"></ion-icon></ion-button>
-			</ion-col>	
-			<ion-col >
-				<ion-button  class="number" (click)="add('0')">0</ion-button>
-			</ion-col>
-			<ion-col >
-				<ion-button   fill="outline" class="fingerButton" (click)="delete()"><ion-icon style="zoom: 1.25;" name="backspace"></ion-icon></ion-button>
-            </ion-col>	
-           
-		</ion-row>
-		<ion-row *ngIf="!createNew">
-			<ion-col col-md-3></ion-col>
-			<ion-col col-md-3>
-                <ion-button fill="outline" class="fingerButton" (click)="showAuth()"><ion-icon style="zoom: 1.25;" name="finger-print"></ion-icon></ion-button>              
-			</ion-col>
-			<ion-col col-md-3></ion-col>
-        </ion-row>
-       
-    </ion-grid>
-    <div class="errorMessage" *ngIf="!message">
-        <span >Please Enter Correct Pin</span>
-    </div>
-</ion-content>
+<ion-label class="ion-padding ion-text-center"> {{headerMessage}}</ion-label>
+
+<ion-row class="ion-padding">
+	<ion-col class="col-10">
+		<span *ngIf="codeone || codeone == 0">*</span>
+	</ion-col>&nbsp;&nbsp;
+	<ion-col class="col col-10 col-offset-10">
+		<span *ngIf="codetwo || codetwo == 0">*</span>
+	</ion-col>&nbsp;&nbsp;
+	<ion-col class="col col-10 col-offset-10">
+		<span *ngIf="codethree || codethree == 0">*</span>
+	</ion-col>&nbsp;&nbsp;
+	<ion-col class="col-10 col-offset-10">
+		<span *ngIf="codefour || codefour == 0">*</span>
+	</ion-col>
+</ion-row>
+
+<ion-grid class="ion-padding">
+	<ion-row class="ion-padding" style="padding-top: 0px; padding-bottom: 0px;">
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('1')">1</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('2')">2</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('3')">3</ion-button>
+		</ion-col>
+	</ion-row>
+	<ion-row class="ion-padding" style="padding-top: 0px; padding-bottom: 0px;">
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('4')">4</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('5')">5</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('6')">6</ion-button>
+		</ion-col>
+	</ion-row>
+	<ion-row class="ion-padding" style="padding-top: 0px; padding-bottom: 0px;">
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('7')">7</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('8')">8</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('9')">9</ion-button>
+		</ion-col>
+	</ion-row>
+	<ion-row class="ion-padding" style="padding-top: 0px; padding-bottom: 0px;">
+		<ion-col size-md>
+			<ion-button fill="outline" class="fingerButton" (click)="reset()">
+				<ion-icon style="zoom: 1.25;" name="reload-outline"></ion-icon>
+			</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button class="number" (click)="add('0')">0</ion-button>
+		</ion-col>
+		<ion-col size-md>
+			<ion-button fill="outline" class="fingerButton" (click)="delete()">
+				<ion-icon style="zoom: 1.25;" name="backspace"></ion-icon>
+			</ion-button>
+		</ion-col>
+
+	</ion-row>
+
+	<ion-footer class="ion-no-border">
+		<ion-toolbar align="center">
+			<ion-label *ngIf="!createNew && faioAvailable" (click)="showAuth()" class="ion-text-center">
+				<ion-icon style="zoom: 1.5;" name="finger-print"></ion-icon><br>{{useBio}}
+			</ion-label>
+		</ion-toolbar>
+	</ion-footer>
+
+
+
+
+</ion-grid>

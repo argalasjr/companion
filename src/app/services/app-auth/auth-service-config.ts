@@ -13,7 +13,7 @@ const WELL_KNOWN_PATH = '.well-known';
  * discovery document can be found under an issuer's base URI.
  */
 const OPENID_CONFIGURATION = 'openid-configuration';
-const helpers = new ErrorDialogService(new AlertController());
+
 export class MyAuthorizationServiceConfiguration extends AuthorizationServiceConfiguration {
 
 

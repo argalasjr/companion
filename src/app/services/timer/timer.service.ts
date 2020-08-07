@@ -1,11 +1,10 @@
-import { Injectable, EventEmitter, Output, OnInit, NgZone } from '@angular/core';
+import { Injectable, EventEmitter, Output, OnInit } from '@angular/core';
 import { Storage } from '@ionic/storage';
 import { AlertController, Platform} from '@ionic/angular';
 import { NetworkService } from 'src/app/services/network/network.service';
 import { TARecord } from 'src/app/interfaces/record';
 import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
 import { WorkSessionCode } from 'src/app/pages/dashboard/dashboard.page';
-import { LoadingService } from 'src/app/services/loading/loading.service';
 import { Device } from '@ionic-native/device/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { AuthProvider } from '../../providers/auth/auth.provider';
@@ -37,7 +36,6 @@ export class TimerService implements OnInit {
         private platform: Platform,
         private network: NetworkService,
         private restApi: RestApiService,
-        private loadingService: LoadingService,
         private geolocation: Geolocation,
         private device: Device,
         private auth: AuthProvider,
@@ -53,20 +51,21 @@ export class TimerService implements OnInit {
                 this.onlineRecordsList = recordsList;
                 this.loadWorkStatus();
             });
-            // this.auth.logoutCompletedEvent.subscribe(
-            //     () => {
-            //         this.userWorkSession = new DayWorkSession(
-            //             '0',
-            //             null,
-            //             0,
-            //             0);
-            //         this.userWorkTimes = {daySeconds: 0 , weekSeconds: 0 , monthSeconds: 0 };
-            //         this.workTimesLoadedEvent.emit(this.userWorkTimes);
-            //         this.timerEvent.emit(0);
-            //         this.removeSessionFromStorage();
 
-            //     }
-            //   );
+            this.auth.logoutCompletedEvent.subscribe(
+                () => {
+                    this.userWorkSession = new DayWorkSession(
+                        '0',
+                        null,
+                        0,
+                        0);
+                    this.userWorkTimes = {daySeconds: 0 , weekSeconds: 0 , monthSeconds: 0 };
+                    this.workTimesLoadedEvent.emit(this.userWorkTimes);
+                    this.timerEvent.emit(0);
+                    this.removeSessionFromStorage();
+
+                }
+              );
 
     }
     async ngOnInit() {
@@ -94,8 +93,8 @@ export class TimerService implements OnInit {
                             console.log(jsonRecords);
                             this.onlineRecordsList = jsonRecords.items;
                             this.loadWorkStatus();
-                            if (this.userWorkTimes && this.userWorkTimes.daySeconds > 0) {
-                                console.log('setting day seconds ', this.userWorkTimes.daySeconds);
+                            if (this.userWorkSession.uid !== '0' && this.userWorkTimes && this.userWorkTimes.daySeconds > 0) {
+                                console.log('setting day seconds from cloud ', this.userWorkTimes.daySeconds);
                                 this.timerEvent.emit(this.userWorkTimes.daySeconds);
                             }
                             if (this.userWorkSession.uid === '0' ) {
@@ -122,9 +121,9 @@ export class TimerService implements OnInit {
                     console.log(user);
                 }
                 if (this.network.getCurrentNetworkStatus() === 'Online' && this.userWorkTimes) {
-                    if ( this.userWorkTimes.daySeconds > user.totalDaySeconds) {
+                    
                         user.totalDaySeconds = this.userWorkTimes.daySeconds;
-                    }
+                    
                 }
                 if (this.userWorkSession.uid === '0' ) {
                 console.log('creating day session');
@@ -187,7 +186,11 @@ export class TimerService implements OnInit {
             this.workStatusChangedEvent.emit(code);
             this.timerInterval = setInterval(() => {
             const now = new Date();
-            const timeDifference = now.getTime() - this.userWorkSession.lastChecked.getTime();
+            let timeDifference = 0
+            if (this.userWorkSession.lastChecked){
+                timeDifference = now.getTime() - this.userWorkSession.lastChecked.getTime();
+            }
+      
             const seconds = timeDifference / 1000;
             this.userWorkSession.addToTotalSeconds(seconds);
             this.userWorkSession.setLastChecked(now);
@@ -291,16 +294,6 @@ export class TimerService implements OnInit {
 
     }
 
-    increaseSeconds(user, amount): void {
-        user.addToTotalSeconds(amount);
-        this.save( this.USER_WORK_SESSION_KEY + user.uid);
-    }
-
-    decreaseSeconds(user, amount): void {
-        user.deductFromTotalSeconds(amount);
-        this.save( this.USER_WORK_SESSION_KEY + user.uid);
-    }
-
     adduser(userUid): void {
         let totalDaySeconds = 0;
         let workStatus = this.basUser.att_Status;
@@ -313,15 +306,27 @@ export class TimerService implements OnInit {
             totalDaySeconds = this.userWorkTimes.daySeconds;
             console.log('setting day seconds ', totalDaySeconds);
         }
-
+        for(let i = 0 ; i < this.onlineRecordsList.length ; i++){
+            const elemDay =new Date(this.onlineRecordsList[i].bas_Timestamp)
+            if (elemDay.getUTCDate() === lastChecked.getUTCDate())
+            {
+                console.log('nasiel som record tento den koncim ',this.onlineRecordsList[i])
+                lastChecked = elemDay
+                break;
+            }
+        }
         const latestOnlineRecord = this.onlineRecordsList[ (this.onlineRecordsList.length - 1) ];
         if (latestOnlineRecord) {
-        lastChecked = new Date(latestOnlineRecord.bas_Timestamp);
-        workStatus = latestOnlineRecord.bas_Context;
+            workStatus = latestOnlineRecord.bas_Context;
         }
         this.userWorkSession.setLastChecked( lastChecked);
         this.userWorkSession.setTotalDaySeconds(totalDaySeconds);
-        this.userWorkSession.setStatus( workStatus);
+        if(workStatus){
+            this.userWorkSession.setStatus( workStatus);
+        } else {
+            this.userWorkSession.setStatus( 200 );
+        }
+        
         console.log(this.userWorkSession);
         this.save(  this.userWorkSession.uid);
         if (workStatus !== 200) {

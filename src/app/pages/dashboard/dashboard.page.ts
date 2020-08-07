@@ -1,16 +1,13 @@
 import { Component, NgZone, OnInit, ChangeDetectorRef } from '@angular/core';
-import { NavController, AlertController, Platform } from '@ionic/angular';
+import { Platform } from '@ionic/angular';
 import { ErrorDialogService } from 'src/app/services/error-dialog/error-dialog.service';
-import { RestApiService } from 'src/app/services/rest-api/rest-api.service';
-import { AuthProvider } from 'src/app/providers/auth/auth.provider';
 import { ActionSheetController } from '@ionic/angular';
 import { TimerService } from 'src/app/services/timer/timer.service';
-import { LoadingService } from 'src/app/services/loading/loading.service';
-import { Storage } from '@ionic/storage';
 import { Profile } from 'src/app/interfaces/profile';
 import { SessionProvider } from 'src/app/providers/session/session.provider';
 import { BasUser } from 'src/app/interfaces/bas-user';
 import { NetworkService } from '../../services/network/network.service';
+import { TranslateService } from '@ngx-translate/core';
 
 export const enum WorkSessionCode {
 
@@ -44,23 +41,18 @@ export class DashboardPage implements OnInit {
   currentStatus = 0;
   constructor(
     private ngZone: NgZone,
-    private navCtrl: NavController,
-    private alertCtrl: AlertController,
     private helpers: ErrorDialogService,
     private platform: Platform,
-    private restApi: RestApiService,
-    private auth: AuthProvider,
     private cd: ChangeDetectorRef,
     private actionSheetController: ActionSheetController,
     private timer: TimerService,
-    private loadingService: LoadingService,
-    private storage: Storage,
     private network: NetworkService,
-    private session: SessionProvider
-    ) {
-      this.platform.ready()
+    private session: SessionProvider,
+    private tr: TranslateService
+  ) {
+    this.platform.ready()
       .then(() => {
-        this.ngZone.run( () => {
+        this.ngZone.run(() => {          
           this.helpers.appendLogListEvent.subscribe((msg) => {
             if (this.loggerList) {
               this.loggerList.push(msg);
@@ -77,10 +69,13 @@ export class DashboardPage implements OnInit {
             });
 
           this.timer.timerEvent.subscribe((time) => {
-            if ( typeof time ===  'object' ) {
+            if (typeof time === 'object') {
               console.log(time);
             } else {
               // console.log(time);
+              if ( time % 60 === 0){
+                console.log('update the work times')
+              }
               this.displayTime = time;
               this.cd.detectChanges();
             }
@@ -88,8 +83,8 @@ export class DashboardPage implements OnInit {
           });
 
           this.timer.workStatusChangedEvent.subscribe((status) => {
-              this.currentStatus = status;
-              this.cd.detectChanges();
+            this.currentStatus = status;
+            this.cd.detectChanges();
           });
 
 
@@ -116,13 +111,13 @@ export class DashboardPage implements OnInit {
             this.cd.detectChanges();
           });
 
-  });
-  });
-}
+        });
+      });
+  }
 
   async ngOnInit() {
-      console.log('platform ready');
-      this.loggerList.push('platform ready');
+    console.log('platform ready');
+    this.loggerList.push('platform ready');
   }
 
 
@@ -132,7 +127,7 @@ export class DashboardPage implements OnInit {
     console.log('ionViewWillEnter Dashboard');
     this.loggerList.push('ionViewWillEnter Dashboard');
     if (this.session.isValidSession()) {
-     this.isEnabled = true;
+      this.isEnabled = true;
     } else {
       this.isEnabled = false;
       this.displayTime = 0;
@@ -143,8 +138,8 @@ export class DashboardPage implements OnInit {
   }
 
   async presentActionSheet() {
-        this.actionSheetVisible = true;
-        this.cd.detectChanges();
+    this.actionSheetVisible = true;
+    this.cd.detectChanges();
   }
 
   async hideActionSheet() {
@@ -155,9 +150,9 @@ export class DashboardPage implements OnInit {
 
   async showActionSheet() {
     const actionSheet = await this.actionSheetController.create({
-      header: 'PLEASE SELECT NEW STATUS',
+      header: this.tr.instant('dashboard.select-status'),
       buttons: [{
-        text: 'Work',
+        text: this.tr.instant('dashboard.work'),
         icon: 'business',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -170,8 +165,8 @@ export class DashboardPage implements OnInit {
           }
         }
       },
-       {
-        text: 'Break',
+      {
+        text: this.tr.instant('dashboard.break'),
         icon: 'cafe',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -182,7 +177,7 @@ export class DashboardPage implements OnInit {
         }
       },
       {
-        text: 'Education',
+        text: this.tr.instant('dashboard.education'),
         icon: '../assets/icon/school.svg',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -192,7 +187,7 @@ export class DashboardPage implements OnInit {
           this.cd.detectChanges();
         }
       }, {
-        text: 'Trip',
+        text: this.tr.instant('dashboard.trip'),
         icon: 'briefcase',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -202,7 +197,7 @@ export class DashboardPage implements OnInit {
           this.cd.detectChanges();
         }
       }, {
-        text: 'Meeting',
+        text: this.tr.instant('dashboard.meeting'),
         icon: 'people',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -213,7 +208,7 @@ export class DashboardPage implements OnInit {
         }
       },
       {
-        text: 'Doctor',
+        text: this.tr.instant('dashboard.doctor'),
         icon: '../assets/icon/stethoscope.svg',
         cssClass: 'action-sheet-button-success',
         handler: () => {
@@ -224,7 +219,7 @@ export class DashboardPage implements OnInit {
         }
       },
       {
-        text: 'Off Duty',
+        text: this.tr.instant('dashboard.off-duty'),
         icon: '../assets/icon/alarm-off.svg',
         cssClass: 'action-sheet-button-danger',
         handler: () => {
